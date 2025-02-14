@@ -1,8 +1,11 @@
-export default {
-  external: ['react-icons/fa'],
-  input: 'src/index.jsx',
-  output: {
-    file: 'dist/bundle.js',
-    format: 'iife',
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react()],
+  build: {
+    rollupOptions: {
+      external: ['react-icons/fa'],
+    },
   },
-};
+});
