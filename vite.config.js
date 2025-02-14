@@ -1,7 +1,8 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [react()],
-})
+export default {
+  external: ['react-icons/fa'],
+  input: 'src/index.jsx',
+  output: {
+    file: 'dist/bundle.js',
+    format: 'iife',
+  },
+};
