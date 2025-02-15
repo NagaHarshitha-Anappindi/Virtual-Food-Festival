@@ -6,7 +6,7 @@ export default defineConfig({
   base: "./", // Ensures assets load properly
   build: {
     rollupOptions: {
-      external: ['react-icons/fa'],
+      //external: ['react-icons/fa'],
     },
   },
 });
