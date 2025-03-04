@@ -1,7 +1,8 @@
 import React from 'react'; 
 import Header from './Header'; 
 import Footer from './Footer'; 
-import './styles.css';
+import '../../styles/styles.css';
+
 
 const features = [
     { image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsMZAw-1OsYs6o7TIayNlrbP8uS-OYyfa9BQ&s', title: 'Festival Listings', description: 'Discover upcoming virtual food festivals and events.' },

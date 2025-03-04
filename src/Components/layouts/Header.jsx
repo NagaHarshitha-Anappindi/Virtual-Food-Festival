@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './header.css'; // Make sure you import the CSS file
+import '../../styles/header.css'; // Make sure you import the CSS file
 
 const Header = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
