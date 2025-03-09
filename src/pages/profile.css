@@ -1,0 +1,89 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background: #f8f9fa;
+  }
+  
+  .profile-container {
+    background: linear-gradient(to right, rgb(173, 216, 230), rgb(232, 142, 211));
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 1000px;
+  }
+  
+  .profile-pic {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+    border: 3px solid #4CAF50;
+  }
+  
+  .profile-field {
+    margin-bottom: 40px;
+    text-align: left;
+    position: relative;
+  }
+  
+  .edit-icon {
+    cursor: pointer;
+    color: #4CAF50;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+  }
+  
+  .upload-button, .save-button {
+    display: inline-block;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    margin-top: 10px;
+    transition: background 0.3s ease-in-out;
+  }
+  
+  .upload-button:hover, .save-button:hover {
+    background-color: #388E3C;
+  }
+  
+  label,h2 {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+    font-size: 30px;
+  }
+  
+  input[type="text"], 
+  input[type="password"], 
+  input[type="date"], 
+  input[type="email"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    height: 50px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 30px;
+    transition: border 0.3s ease-in-out;
+    background: white;
+    color: black;
+  }
+  
+  input:focus {
+    border-color: #4CAF50;
+    outline: none;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+  }

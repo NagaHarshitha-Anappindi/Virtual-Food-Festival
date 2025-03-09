@@ -1,0 +1,131 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+.header {
+    background: url('https://files.oaiusercontent.com/file-28ouuZqzofWr1LTTAxi8eu?se=2025-02-13T14%3A05%3A10Z&sp=r&sv=2024-08-04&sr=b&rscc=max-age%3D604800%2C%20immutable%2C%20private&rscd=attachment%3B%20filename%3Ddb008e4f-2cb3-435e-8045-a83b3fadbacf.webp&sig=UfnLIgOa6N1NFmQJ/D%2BCmkhWopVWPpr9GxFdpF3jYNY%3D') no-repeat center center;
+    background-size: cover;
+    color: white;
+    height: 100vh;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    
+}
+
+.header h1 {
+    font-size: 3rem;
+    margin: 0;
+}
+
+.header p {
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+
+.header button {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    color: white;
+    background-color: #f04bc4;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.header button:hover {
+    background-color: #ff4500;
+}
+
+.features {
+    padding: 50px 20px;
+    background-color: #f9f9f9;
+    text-align: center;
+}
+
+.feature-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.feature {
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 30%;
+    height: 400px; /* Set a fixed height for all cards */
+    margin: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.feature:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.feature img {
+    width: 100%;
+    height: 50%; /* Adjust height to fit within the card */
+    object-fit: cover;
+    border-radius: 15px 15px 0 0;
+    transition: transform 0.3s ease-in-out;
+}
+
+.feature img:hover {
+    transform: scale(1.05);
+}
+
+.feature h3 {
+    font-size: 1.5rem;
+    color: #ff6347;
+    margin: 1rem 0;
+}
+
+.feature p {
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .feature {
+        flex:1 1 calc(50% - 40px);
+    }
+}
+
+@media (max-width: 480px) {
+    .feature {
+        flex: 1 1 calc(100% - 20px);
+    }
+}
+
+.feature-container {
+    justify-content: space-between;
+    align-content: flex-start;
+}
+
+.feature-container::after {
+    content: "";
+    flex: auto;
+}
+
+.feature:nth-child(3n+1) {
+    margin-left: auto;
+}
+
+.feature:nth-child(3n+3) {
+    margin-right: auto;
+}
