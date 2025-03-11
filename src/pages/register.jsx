@@ -1,35 +1,30 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Personal from "../registration/personal";
 import Address from "../registration/address";
 import Credential from "../registration/credential";
+import "./register.css";  // ✅ Correct for normal CSS
+
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
 
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    dob: "",
-    phoneNumber: "",
-    address: "",
-    city: "",
-    state: "",
-    zipCode: "",
-    country: "",
-    email: "",
-    username: "",
-    password: "",
-    confirmPassword: "",
+    personal: { firstName: "", lastName: "", dob: "", phoneNumber: "" },
+    address: { houseNo: "", street: "", landmark: "", city: "", state: "", zipCode: "", country: "" },
+    credentials: { username: "", password: "", confirmPassword: "" },
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
+    setFormData((prev) => ({
+      ...prev,
+      [step === 1 ? "personal" : step === 2 ? "address" : "credentials"]: {
+        ...prev[step === 1 ? "personal" : step === 2 ? "address" : "credentials"],
+        [name]: value,
+      },
     }));
   };
 
@@ -38,10 +33,9 @@ const Register = () => {
 
   const handleSubmit = async () => {
     try {
-      console.log("Submitting Data:", formData);
       await axios.post("http://localhost:3000/users", formData);
       alert("Registration Successful");
-      navigate("/login"); // Redirecting to login page
+      navigate("/dashboard"); // Redirect to dashboard after successful registration
     } catch (error) {
       console.error("Error submitting form", error);
       alert("Registration Failed!");
@@ -50,17 +44,9 @@ const Register = () => {
 
   return (
     <div className="container">
-      <div className="card">
-        {step === 1 && (
-          <Personal formData={formData} handleChange={handleChange} nextStep={nextStep} />
-        )}
-        {step === 2 && (
-          <Address formData={formData} handleChange={handleChange} nextStep={nextStep} prevStep={prevStep} />
-        )}
-        {step === 3 && (
-          <Credential formData={formData} handleChange={handleChange} prevStep={prevStep} handleSubmit={handleSubmit} />
-        )}
-      </div>
+      {step === 1 && <Personal formData={formData.personal} handleChange={handleChange} nextStep={nextStep} />}
+      {step === 2 && <Address formData={formData.address} handleChange={handleChange} nextStep={nextStep} prevStep={prevStep} />}
+      {step === 3 && <Credential formData={formData.credentials} handleChange={handleChange} prevStep={prevStep} handleSubmit={handleSubmit} />}
     </div>
   );
 };

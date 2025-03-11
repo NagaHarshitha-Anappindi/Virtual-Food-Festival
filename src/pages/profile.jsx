@@ -1,7 +1,9 @@
-import React, { useState } from "react";
-import "./Profile.css"; // Import the CSS file
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./profile.css";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const [profilePic, setProfilePic] = useState("path/to/profile-pic.jpg");
   const [formData, setFormData] = useState({
     firstName: "",
@@ -16,6 +18,18 @@ const Profile = () => {
   });
   const [editableFields, setEditableFields] = useState({});
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    console.log("Stored User Data:", storedUser); // Debugging log
+
+    if (!storedUser) {
+      console.warn("No user found, redirecting to login...");
+      navigate("/profile");
+    } else {
+      setFormData(JSON.parse(storedUser));
+    }
+  }, [navigate]);
+
   const enableEdit = (field) => {
     setEditableFields((prev) => ({ ...prev, [field]: true }));
   };
@@ -26,6 +40,8 @@ const Profile = () => {
   };
 
   const saveChanges = () => {
+    localStorage.setItem("user", JSON.stringify(formData));
+    console.log("User data saved:", formData); // Debugging log
     setEditableFields({});
     alert("Changes saved successfully!");
   };
@@ -39,6 +55,12 @@ const Profile = () => {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleLogout = () => {
+    console.log("Logging out..."); // Debugging log
+    localStorage.removeItem("user");
+    navigate("/login");
   };
 
   return (
@@ -65,6 +87,7 @@ const Profile = () => {
       ))}
 
       <button className="save-button" onClick={saveChanges}>Save Changes</button>
+      <button className="logout-button" onClick={handleLogout}>Logout</button>
     </div>
   );
 };

@@ -1,55 +1,62 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
-  const [formData, setFormData] = useState({ username: "", password: "" });
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
+    const [formData, setFormData] = useState({
+        username: "",
+        password: "",
+    });
+    const [error, setError] = useState("");
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
-  };
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
 
-  const handleSubmit = (e) => {
-    e.preventDeACfault();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    // Get registered users from local storage (or use an API if available)
-    const registeredUsers = JSON.parse(localStorage.getItem("users")) || [];
+        try {
+            const response = await axios.post("http://localhost:3000/login", formData);
 
-    // Check if user exists
-    const user = registeredUsers.find(
-      (u) => u.username === formData.username && u.password === formData.password
+            if (response.data.success) {
+                alert("Login successful!");
+                window.location.href = "/dashboard";  // Redirect to dashboard
+            } else {
+                setError("Invalid credentials. Please check your username and password.");
+            }
+        } catch (err) {
+            setError("Invalid credentials. Please check your username and password.");
+            console.error(err);
+        }
+    };
+
+    return (
+        <div>
+            <h2>Login</h2>
+            {error && <p style={{ color: "red" }}>{error}</p>}
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Enter username"
+                    value={formData.username}
+                    onChange={handleChange}
+                    required
+                />
+                <br />
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                />
+                <br />
+                <button type="submit">Login</button>
+            </form>
+        </div>
     );
-
-    if (user) {
-      // Save user session
-      localStorage.setItem("loggedInUser", JSON.stringify(user));
-
-      // Redirect to dashboard
-      navigate("/dashboard");
-    } else {
-      setError("Invalid username or password. Please register first.");
-    }
-  };
-
-  return (
-    <div className="login-container">
-      <h2>Login</h2>
-      {error && <p className="error-message">{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Username:</label>
-          <input type="text" id="username" value={formData.username} onChange={handleChange} required />
-        </div>
-        <div className="form-group">
-          <label>Password:</label>
-          <input type="password" id="password" value={formData.password} onChange={handleChange} required />
-        </div>
-        <button type="submit" className="login-button">Login</button>
-      </form>
-      <p>Don't have an account? <a href="/register">Register here</a></p>
-    </div>
-  );
 };
 
 export default Login;

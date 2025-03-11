@@ -1,6 +1,17 @@
+/* Full-page center alignment */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #f4f4f4;
+  margin: 0;
+}
+
+/* Login container */
 .login-container {
-  width: 350px;
-  margin: auto;
+  width: 100%;
+  max-width: 350px;
   padding: 20px;
   background: white;
   border-radius: 10px;
@@ -8,11 +19,14 @@
   text-align: center;
 }
 
+/* Error message */
 .error-message {
   color: red;
   font-size: 14px;
+  margin-bottom: 10px;
 }
 
+/* Form fields */
 .form-group {
   margin-bottom: 15px;
   text-align: left;
@@ -25,23 +39,40 @@ label {
 
 input {
   width: 100%;
-  padding: 8px;
+  padding: 10px;
   margin-top: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  transition: border 0.3s ease-in-out;
 }
 
+/* Highlight input field when active */
+input:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Login button */
 .login-button {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   background: green;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+  transition: 0.3s;
 }
 
 .login-button:hover {
   background: darkgreen;
+}
+
+/* Responsive adjustments */
+@media (max-width: 400px) {
+  .login-container {
+    width: 90%;
+    padding: 15px;
+  }
 }

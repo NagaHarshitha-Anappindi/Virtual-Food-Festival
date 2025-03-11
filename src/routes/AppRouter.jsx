@@ -1,5 +1,5 @@
-import React from "react";
-import { HashRouter as Router, Routes, Route, Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "../Components/Header";
 import LandingPage from "../Components/LandingPage";
 import Dashboard from "../pages/Dashboard";
@@ -7,17 +7,15 @@ import Register from "../pages/register";
 import Login from "../pages/login";
 import Profile from "../pages/profile";
 
-const AppRouter = () => {   
+const AppRouter = () => {
+  useEffect(() => {
+    !!localStorage.getItem("user"); // This runs but is not stored
+  }, []);
+
   return (
     <Router>
       <Header />
-      <nav>
-        <Link to="/">Home</Link> | <Link to="/dashboard">Dashboard</Link> |{" "}
-        <Link to="/register">Register</Link> | <Link to="/login">Login</Link> |{" "}
-        <Link to="/profile">Profile</Link>
-      </nav>
       <Routes>
-        {/* Home route now renders the LandingPage */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/register" element={<Register />} />
