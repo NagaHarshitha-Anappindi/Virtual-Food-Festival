@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import "./App.css";
-
+import './App.css';
 const Profile = () => {
   const [profilePic, setProfilePic] = useState("path/to/profile-pic.jpg");
   const [formData, setFormData] = useState({
@@ -11,7 +10,6 @@ const Profile = () => {
     password: "",
     dob: "",
     address: "",
-    userType: "Vendor",
     phoneNumber: "",
   });
   const [editableFields, setEditableFields] = useState({});
@@ -28,6 +26,23 @@ const Profile = () => {
   const saveChanges = () => {
     setEditableFields({});
     alert("Changes saved successfully!");
+  };
+
+  const deleteProfile = () => {
+    if (window.confirm("Are you sure you want to delete your profile?")) {
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        username: "",
+        password: "",
+        dob: "",
+        address: "",
+        phoneNumber: "",
+      });
+      setProfilePic("path/to/profile-pic.jpg");
+      alert("Profile deleted successfully.");
+    }
   };
 
   const updateProfilePic = (e) => {
@@ -64,7 +79,8 @@ const Profile = () => {
         </div>
       ))}
 
-      <button className="save-button" onClick={saveChanges}>Save Changes</button>
+      <button className="save-button" onClick={saveChanges}>Save Changes</button><br />
+      <button className="delete-button" onClick={deleteProfile}>Delete Profile</button>
     </div>
   );
 };

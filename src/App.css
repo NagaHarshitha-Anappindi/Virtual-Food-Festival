@@ -42,7 +42,7 @@ body {
   font-size: 18px;
 }
 
-.upload-button, .save-button {
+.upload-button, .save-button,.delete-button {
   display: inline-block;
   padding: 10px 20px;
   cursor: pointer;
