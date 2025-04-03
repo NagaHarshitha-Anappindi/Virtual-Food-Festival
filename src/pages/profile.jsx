@@ -1,34 +1,33 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import "./profile.css";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import "./Profile.css";
 
 const Profile = () => {
-  const navigate = useNavigate();
-  const [profilePic, setProfilePic] = useState("path/to/profile-pic.jpg");
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    username: "",
-    password: "",
-    dob: "",
-    address: "",
-    userType: "Vendor",
-    phoneNumber: "",
-  });
+  const [user, setUser] = useState(null);
+  const [message, setMessage] = useState("");
+  const [profilePic, setProfilePic] = useState("path/to/default-profile.jpg");
   const [editableFields, setEditableFields] = useState({});
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    console.log("Stored User Data:", storedUser); // Debugging log
-
-    if (!storedUser) {
-      console.warn("No user found, redirecting to login...");
-      navigate("/profile");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser)); // Load user details from localStorage
     } else {
-      setFormData(JSON.parse(storedUser));
+      setMessage("No user logged in.");
     }
-  }, [navigate]);
+  }, []);
+
+  const handleDeleteProfile = async () => {
+    try {
+      await axios.delete(`http://localhost:3000/users/${user.id}`);
+      setUser(null);
+      localStorage.removeItem("user"); // Clear user data
+      setMessage("Profile deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting profile:", error);
+      setMessage(`Error deleting profile: ${error.message}`);
+    }
+  };
 
   const enableEdit = (field) => {
     setEditableFields((prev) => ({ ...prev, [field]: true }));
@@ -36,14 +35,28 @@ const Profile = () => {
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    setFormData((prev) => ({ ...prev, [id]: value }));
+    const keys = id.split(".");
+    setUser((prev) => {
+      const updatedUser = { ...prev };
+      let temp = updatedUser;
+      for (let i = 0; i < keys.length - 1; i++) {
+        temp = temp[keys[i]];
+      }
+      temp[keys[keys.length - 1]] = value;
+      return updatedUser;
+    });
   };
 
-  const saveChanges = () => {
-    localStorage.setItem("user", JSON.stringify(formData));
-    console.log("User data saved:", formData); // Debugging log
-    setEditableFields({});
-    alert("Changes saved successfully!");
+  const saveChanges = async () => {
+    try {
+      await axios.put(`http://localhost:3000/users/${user.id}`, user);
+      setEditableFields({});
+      localStorage.setItem("user", JSON.stringify(user)); // Update localStorage
+      alert("Changes saved successfully!");
+    } catch (error) {
+      console.error("Error saving changes:", error);
+      setMessage("Error updating profile.");
+    }
   };
 
   const updateProfilePic = (e) => {
@@ -57,37 +70,56 @@ const Profile = () => {
     }
   };
 
-  const handleLogout = () => {
-    console.log("Logging out..."); // Debugging log
-    localStorage.removeItem("user");
-    navigate("/login");
+  const renderField = (field, value, parentKey = "") => {
+    const fieldName = parentKey ? `${parentKey}.${field}` : field;
+    if (typeof value === "object" && value !== null) {
+      return (
+        <div key={field} className="profile-section">
+          <h4>{field.toUpperCase()}</h4>
+          {Object.keys(value).map((subField) =>
+            renderField(subField, value[subField], fieldName)
+          )}
+        </div>
+      );
+    } else {
+      return (
+        <div key={fieldName} className="profile-field">
+          <label htmlFor={fieldName}>
+            {field.replace(/([A-Z])/g, " $1").trim()}:
+          </label>
+          <input
+            type={field.includes("password") ? "password" : field.includes("dob") ? "date" : "text"}
+            id={fieldName}
+            value={value}
+            onChange={handleChange}
+            disabled={!editableFields[fieldName]}
+          />
+          <span className="edit-icon" onClick={() => enableEdit(fieldName)}>✏</span>
+        </div>
+      );
+    }
   };
 
   return (
     <div className="profile-container">
       <h2>Profile</h2>
-      <img src={profilePic} alt="Profile" className="profile-pic" />
-      <input type="file" id="profilePicInput" hidden onChange={updateProfilePic} />
-      <button className="upload-button" onClick={() => document.getElementById("profilePicInput").click()}>
-        Upload
-      </button>
+      {message && <p>{message}</p>}
+      {user ? (
+        <div>
+          <img src={profilePic} alt="Profile" className="profile-pic" />
+          <input type="file" id="profilePicInput" hidden onChange={updateProfilePic} />
+          <button className="upload-button" onClick={() => document.getElementById("profilePicInput").click()}>
+            Upload
+          </button>
 
-      {Object.keys(formData).map((field) => (
-        <div className="profile-field" key={field}>
-          <label htmlFor={field}>{field.replace(/([A-Z])/g, " $1").trim()}:</label>
-          <input
-            type={field === "password" ? "password" : field === "dob" ? "date" : "text"}
-            id={field}
-            value={formData[field]}
-            onChange={handleChange}
-            disabled={!editableFields[field]}
-          />
-          <span className="edit-icon" onClick={() => enableEdit(field)}>✏</span>
+          {Object.keys(user).map((field) => renderField(field, user[field]))}
+
+          <button className="save-button" onClick={saveChanges}>Save Changes</button>
+          <button className="delete-button" onClick={handleDeleteProfile}>Delete Profile</button>
         </div>
-      ))}
-
-      <button className="save-button" onClick={saveChanges}>Save Changes</button>
-      <button className="logout-button" onClick={handleLogout}>Logout</button>
+      ) : (
+        <p>No user data available.</p>
+      )}
     </div>
   );
 };

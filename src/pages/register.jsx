@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Personal from "../registration/personal";
 import Address from "../registration/address";
 import Credential from "../registration/credential";
-import "./register.css";  // ✅ Correct for normal CSS
+import "./register.css"; // ✅ Ensure correct import for styles
 
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -11,12 +11,14 @@ const Register = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
 
+  // Form Data State
   const [formData, setFormData] = useState({
     personal: { firstName: "", lastName: "", dob: "", phoneNumber: "" },
     address: { houseNo: "", street: "", landmark: "", city: "", state: "", zipCode: "", country: "" },
     credentials: { username: "", password: "", confirmPassword: "" },
   });
 
+  // Handle Input Change
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -28,17 +30,30 @@ const Register = () => {
     }));
   };
 
+  // Next & Previous Step Functions
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
+  // Handle Form Submission
   const handleSubmit = async () => {
+    // ✅ Validate passwords
+    if (formData.credentials.password !== formData.credentials.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    // ✅ Log formData for debugging
+    console.log("Submitting Data:", formData);
+
     try {
-      await axios.post("http://localhost:3000/users", formData);
+      const response = await axios.post("http://localhost:3000/users", formData);
+
       alert("Registration Successful");
-      navigate("/dashboard"); // Redirect to dashboard after successful registration
+      console.log("Response:", response.data);
+      navigate("/dashboard"); // Redirect after success
     } catch (error) {
-      console.error("Error submitting form", error);
-      alert("Registration Failed!");
+      console.error("Error submitting form", error.response?.data || error.message);
+      alert(`Registration Failed! ${error.response?.data?.message || "Unknown error"}`);
     }
   };
 

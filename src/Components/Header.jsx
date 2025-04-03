@@ -13,19 +13,13 @@ const Header = () => {
           <Link to="/" className="nav-link">Home</Link>
           <Link to="/about" className="nav-link">About</Link>
           <Link to="/events" className="nav-link">Events</Link>
-          
-          
-
           <Link to="/contact" className="nav-link">Contact</Link>
           <Link to="/register" className="nav-link">Register</Link>
           <Link to="/login" className="nav-link">Login</Link>
           <Link to="/profile" className="nav-link">Profile</Link>
         </nav>
 
-        <div className="search-container">
-          <input type="text" placeholder="Search..." className="search-input" />
-          <span className="search-icon">🔍</span>
-        </div>
+        
       </header>
     </div>
   );
